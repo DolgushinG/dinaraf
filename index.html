@@ -11,6 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
+        <meta http-equiv="Content-Security-Policy" content="require-trusted-types-for 'script'; trusted-types dompurify sanitizeWithDomPurify">
 
         <!--Google fonts links-->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
@@ -503,9 +504,21 @@
 
                 });
             });
+  const ttSanitizer = trustedTypes.createPolicy('sanitizeWithDomPurify', {
+    createHTML: string => DOMPurify.sanitize(string)
+  });
+  function render() {
+    let data = document.getElementById("taData").value;
+    let div = document.getElementById("divRender");
+
+    console.log(`Rendering data in the div: ${data}`);
+
+    div.innerHTML = ttSanitizer.createHTML(data);
+  }
+</script>
         </script>
         <script src="assets/js/plugins.js"></script>
         <script src="assets/js/main.js"></script>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.2.7/purify.min.js"></script>
     </body>
 </html>
